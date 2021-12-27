@@ -45,7 +45,7 @@ export function register(config?: Config) {
         // service worker/PWA documentation.
         navigator.serviceWorker.ready.then(() => {
           console.log(
-            'This web app is being served cache-first by a service ' +
+            'This web app is being served cache-first by a sservice ' +
               'worker. To learn more, visit https://cra.link/PWA'
           );
         });
@@ -76,7 +76,7 @@ function registerValidSW(swUrl: string, config?: Config) {
                 'New content is availables and will be used when all ' +
                   'tabs for this page are closed. Sese https://cra.link/PWA.'
               );
-
+                debugger;
               // Execute callback
               if (config && config.onUpdate) {
                 config.onUpdate(registration);

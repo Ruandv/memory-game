@@ -1,8 +1,9 @@
 import React from "react";
+
 import ReactDOM from "react-dom";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import "./index.scss";
-import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import History from "./components/History/history";
 import { createStore } from "redux";
 import reportWebVitals from "./reportWebVitals";
@@ -73,13 +74,24 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById("root")
 );
-const conf = {
-  onSuccess: (registration: ServiceWorkerRegistration) => {
 
+const conf = {
+  onSuccess: (registration: ServiceWorkerRegistration) => {},
+  onUpdate: (reg: ServiceWorkerRegistration) => {
+    Notification.requestPermission().then((result) => {
+      if (result === "granted") {
+        reg.showNotification("New update", {
+          body: "We are busy updatisng you now",
+          requireInteraction: true,
+          actions: [
+            { action: "ABC", title: "Act ABC" },
+            { action: "DEF", title: "ACT DEF" },
+          ],
+        });
+        reg.waiting!.postMessage({ type: "SKIP_WAITING" });
+      }
+    });
   },
-  onUpdate: (registration: ServiceWorkerRegistration) => {
-    registration.showNotification("New version available",{body:"This is the body"})
-  }
 };
 serviceWorkerRegistration.register(conf);
 // If you want to start measuring performance in your app, pass a function
