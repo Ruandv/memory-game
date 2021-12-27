@@ -1,0 +1,40 @@
+@import "../../index.scss";
+
+.modalContainer {
+  height: 100vh;
+  width: 100vw;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+}
+.modal {
+  display: flex;
+  flex-direction: column;
+  background-color: peachpuff;
+  border-radius: 4px;
+  width: 400px;
+  height: 100px;
+  header {
+    display: flex;
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    border-bottom: 2px solid gainsboro;
+  }
+  .headerText {
+    padding: 4px;
+    text-align: center;
+  }
+  .content {
+    padding: 4px;
+    flex-grow: 1;
+  }
+  footer {
+    padding: 4px;
+    display: flex;
+    justify-content: space-evenly;
+  }
+}
