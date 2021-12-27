@@ -14,6 +14,7 @@ import { IGameState } from "./redux/interfaces/NewGame";
 import { IPlayer } from "./redux/interfaces/Player";
 import rootReducer from "./redux/RootReducer";
 import Game from "./components/Game/game";
+import NotificationService from "./services/notificationService";
 
 let gameList = {} as IGameState;
 //check if you have local storage data
@@ -78,21 +79,15 @@ ReactDOM.render(
 const conf = {
   onSuccess: (registration: ServiceWorkerRegistration) => {},
   onUpdate: (reg: ServiceWorkerRegistration) => {
-    Notification.requestPermission().then((result) => {
-      if (result === "granted") {
-        reg.showNotification("New update", {
-          body: "We are busy updatisng you now",
-          requireInteraction: true,
-          actions: [
-            { action: "ABC", title: "Act ABC" },
-            { action: "DEF", title: "ACT DEF" },
-          ],
-        });
-        reg.waiting!.postMessage({ type: "SKIP_WAITING" });
-      }
-    });
+    NotificationService.register(reg);
+    var res = NotificationService.getInstance();
+    if (res !== null) {
+      (res as NotificationService).showNotification("T E S T");
+      reg.waiting!.postMessage({ type: "SKIP_WAITING" });
+    }
   },
 };
+
 serviceWorkerRegistration.register(conf);
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
