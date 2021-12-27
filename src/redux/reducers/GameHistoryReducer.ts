@@ -11,7 +11,7 @@ function nextId(gamelist: IGameItem[]) {
 export default function GameHistoryReducer(state: IGameState = {} as IGameState, action: ActionType) {
     // The reducer normally looks at the action type field to decide what happens
     var result: any;
-    
+    debugger;
     switch (action.type) {
         case ActionTypes.NextPlayer:
             var gameItem = action.payload as IGameItem;

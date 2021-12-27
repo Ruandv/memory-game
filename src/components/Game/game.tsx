@@ -71,6 +71,7 @@ function Game() {
 
   const generateGame = () => {
     SetGameItem({
+      id: state.history.reduce((maxId, history) => Math.max(history.id, maxId), -1)+2,
       gameName: `${getGameName()}`,
       players: [
         { firstName: "Bob", lastName: "Builder", isActive: true } as IPlayer,
