@@ -7,23 +7,23 @@ export default class NotificationService {
         Notification.requestPermission().then((result) => {
             if (result === "granted") {
                 this._serviceWorkerRegistration = registration;
+                this.classInstance = new NotificationService();
             }
         })
     }
 
     public static getInstance(): NotificationService | null {
-        if (!NotificationService.classInstance) {
-            Notification.requestPermission().then((result) => {
-                if (result === "granted") {
-                    return NotificationService.classInstance = new NotificationService();
-                }
-            });
+        if (this._serviceWorkerRegistration && this.classInstance) {
+            return this.classInstance;
         }
         return null;
     }
 
-    showNotification(message: string){
-        NotificationService._serviceWorkerRegistration.showNotification("Memory  Game", {
+    showMyNotification(message: string) {
+        while (NotificationService._serviceWorkerRegistration === null || NotificationService._serviceWorkerRegistration === undefined) {
+            console.log('Waiting for NS...');
+        }
+        NotificationService._serviceWorkerRegistration.showNotification("Memory Game", {
             body: message
         });
     }

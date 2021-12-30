@@ -74,9 +74,8 @@ function registerValidSW(swUrl: string, config?: Config) {
               // content until all client tabs are closed.
               console.log(
                 'New content is availables and will be used when all ' +
-                  'tabs for this page are closed. Sese https://cra.link/PWA.'
+                  'tabs for this page are closed. Sese https://cra.link/PWA .'
               );
-                debugger;
               // Execute callback
               if (config && config.onUpdate) {
                 config.onUpdate(registration);
@@ -125,7 +124,7 @@ function checkValidServiceWorker(swUrl: string, config?: Config) {
       }
     })
     .catch(() => {
-      console.log('No internet connection found. App is running in offline mode.');
+      console.log('No internet connection found. App is running in offline mode. ');
     });
 }
 

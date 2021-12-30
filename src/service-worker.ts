@@ -13,6 +13,7 @@ import { ExpirationPlugin } from 'workbox-expiration';
 import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
 import { StaleWhileRevalidate } from 'workbox-strategies';
+import StorageService from './services/storageService';
 
 declare const self: ServiceWorkerGlobalScope;
 
@@ -70,12 +71,26 @@ registerRoute(
 );
 
 // This allows the web app to trigger skipWaiting via
-// registration.waiting.postMessage({type: 'SKIP_WAITING'})
+// registration.waiting.postMe ssage({type: 'SKIP_WAITING'})
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
-    console.log("New version  installed.");
+    var storageService = StorageService.getInstance();
+    var dt = msToTime(new Date());
+    storageService.save("version", JSON.stringify(`{version:'${dt}'}`));
   }
 });
+function msToTime(duration: any) {
+  var milliseconds = Math.floor((duration % 1000) / 100),
+    seconds = Math.floor((duration / 1000) % 60),
 
+    minutes = Math.floor((duration / (1000 * 60)) % 60),
+    hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+
+  var hours1 = (hours < 10) ? "0" + hours : hours;
+  var minutes1 = (minutes < 10) ? "0" + minutes : minutes;
+  var seconds1 = (seconds < 10) ? "0" + seconds : seconds;
+ 
+  return hours1 + ":--" + minutes1 + ":" + seconds1 + "." + milliseconds;
+}
 // Any other custom service worker logic can go here.

@@ -15,10 +15,12 @@ import { IPlayer } from "./redux/interfaces/Player";
 import rootReducer from "./redux/RootReducer";
 import Game from "./components/Game/game";
 import NotificationService from "./services/notificationService";
+import StorageService from "./services/storageService";
 
 let gameList = {} as IGameState;
 //check if you have local storage data
-var data = localStorage.getItem("GameState");
+var storageService = StorageService.getInstance();
+var data = storageService.getValue("GameState");
 if (data === null) {
   gameList = {
     history: [
@@ -50,12 +52,15 @@ if (data === null) {
       completed: false,
     } as IGameItem,
   };
-  localStorage.setItem("GameState", JSON.stringify(gameList));
+  storageService.save("GameState", JSON.stringify(gameList));
 } else {
   gameList = JSON.parse(data) as IGameState;
 }
 var preloadedState = { gameList };
-
+const getVersion = () => {
+  var data = storageService.getValue("version", true);
+  return data.version;
+};
 const store = createStore(rootReducer, preloadedState as any);
 ReactDOM.render(
   <React.StrictMode>
@@ -70,6 +75,7 @@ ReactDOM.render(
           <Route path="game/:gameId" element={<Game />} />
           <Route path="newGameForm" element={<Game />} />
         </Routes>
+        <footer>{`Version : ${getVersion()}`}</footer>
       </BrowserRouter>
     </Provider>
   </React.StrictMode>,
@@ -82,8 +88,10 @@ const conf = {
     NotificationService.register(reg);
     var res = NotificationService.getInstance();
     if (res !== null) {
-      (res as NotificationService).showNotification("T E S T");
       reg.waiting!.postMessage({ type: "SKIP_WAITING" });
+      (res as NotificationService).showMyNotification("T E S T 1 2 3");
+    } else {
+      console.error("NS IS NULL!!");
     }
   },
 };

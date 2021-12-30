@@ -2,6 +2,7 @@ import { ActionType } from "../interfaces/ActionType";
 import { ActionTypes } from "../ActionTypes";
 import { IGameItem, ITileSelection } from "../interfaces/GameItem";
 import { IGameState } from "../interfaces/NewGame";
+import StorageService from "../../services/storageService";
 
 function nextId(gamelist: IGameItem[]) {
     const maxId = gamelist.reduce((maxId, history) => Math.max(history.id, maxId), -1)
@@ -9,9 +10,9 @@ function nextId(gamelist: IGameItem[]) {
 }
 // Use the initialState as a default value
 export default function GameHistoryReducer(state: IGameState = {} as IGameState, action: ActionType) {
+    var storageService = StorageService.getInstance();
     // The reducer normally looks at the action type field to decide what happens
     var result: any;
-    debugger;
     switch (action.type) {
         case ActionTypes.NextPlayer:
             var gameItem = action.payload as IGameItem;
@@ -67,7 +68,6 @@ export default function GameHistoryReducer(state: IGameState = {} as IGameState,
             // care about this specific action, return the existing state unchanged
             return state
     }
-    localStorage.setItem("GameState", JSON.stringify(result));
-    console.log(action.type + ": Saved state");
+    storageService.save("GameState", JSON.stringify(result));
     return result;
 }
