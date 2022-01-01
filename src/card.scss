@@ -3,18 +3,21 @@
 .card {
   display: flex;
   flex-direction: column;
-  background-color: $history-card-background;
+  background-color: $primary;
+  background-image: linear-gradient(to top, $secondary 10%, $primary);
+  border: 1px solid $history-card-background;
   animation-name: fadeIn;
   animation-duration: 4s;
-  max-width: 200px;
+  width: 200px;
+  height: 200px;
   padding: 16px;
   margin: 4px;
-  height: fit-content;
   header {
     font-weight: 700;
   }
 
   .container {
+    overflow: scroll;
   }
 
   .footer {
