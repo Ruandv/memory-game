@@ -1,0 +1,17 @@
+@import "../../colours.scss";
+.inputGroup {
+  display: flex;
+  padding: 4px;
+  align-items: center;
+}
+.inputLabel {
+  font-weight: 700;
+  padding: 4px;
+  width: 100%;
+  display: inline;
+}
+
+input {
+  border: 1px solid $primary-border;
+  border-radius: 4px;
+}

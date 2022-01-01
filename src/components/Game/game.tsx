@@ -1,4 +1,5 @@
 import Styles from "./game.module.scss";
+import InputGroup from "../../controls/inputGroup/inputGroup";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -165,24 +166,33 @@ function Game() {
       navigate("/game/0000");
     }
   };
+  let firstNameProps = {
+    labelText: "First name",
+    defaultValue: "",
+    onChange: (evt: any) => {},
+  };
 
+  let lastNameProps = {
+    labelText: "Last name",
+    defaultValue: "",
+    onChange: (evt: any) => {},
+  };
+
+  let gameNameProps = {
+    labelText: "Game Name",
+    defaultValue: gameItem?.gameName,
+    onChange: (x: any) => {
+      SetGameItem((prevState) => ({
+        ...prevState,
+        gameName: x.target.value,
+      }));
+    },
+  };
   const getNewGameForm = () => {
     return (
       <div className={`${Styles.newGame}`}>
         <div className={"row"}>
-          <div className={Styles.inputGroup}>
-            <div className={Styles.inputLabel}>Game Name</div>
-            <input
-              type="text"
-              defaultValue={gameItem?.gameName}
-              onChange={(x) => {
-                SetGameItem((prevState) => ({
-                  ...prevState,
-                  gameName: x.target.value,
-                }));
-              }}
-            ></input>
-          </div>
+          <InputGroup {...gameNameProps} />
         </div>
         <div className={"row"}>
           <div className={Styles.inputGroup}>
@@ -209,6 +219,16 @@ function Game() {
             </div>
             <div className={Styles.player}>
               {gameItem?.players?.map((p, i) => {
+                firstNameProps.defaultValue = p.firstName;
+                firstNameProps.onChange = (evt) => {
+                  gameItem.players[i].firstName = evt.target.value;
+                };
+
+                lastNameProps.defaultValue = p.lastName;
+                lastNameProps.onChange = (evt) => {
+                  gameItem.players[i].lastName = evt.target.value;
+                };
+
                 return (
                   <div key={`player${i}`} className={Styles.groupSection}>
                     <div className={`${Styles.inputGroup} ${Styles.offset}`}>
@@ -226,26 +246,8 @@ function Game() {
                         Remove
                       </div>
                     </div>
-                    <div className={Styles.inputGroup}>
-                      <div className={Styles.inputLabel}>First Name</div>
-                      <input
-                        type="text"
-                        value={p.firstName}
-                        onChange={(evt) => {
-                          gameItem.players[i].firstName = evt.target.value;
-                        }}
-                      ></input>
-                    </div>
-                    <div className={Styles.inputGroup}>
-                      <div className={Styles.inputLabel}>Last Name</div>
-                      <input
-                        type="text"
-                        value={p.lastName}
-                        onChange={(evt) => {
-                          gameItem.players[i].lastName = evt.target.value;
-                        }}
-                      ></input>
-                    </div>
+                    <InputGroup {...firstNameProps} />
+                    <InputGroup {...lastNameProps} />
                     <div className={Styles.inputGroup}>
                       <div className={Styles.inputLabel}>Ranking</div>
                       <input type="number" value={p.ranking}></input>
@@ -313,7 +315,7 @@ function Game() {
                      ? Styles.tile4
                      : Styles.tile6
                  } 
-                     ${isSelected(t) ? Styles.focus : ""}`}
+                     ${isSelected(t) ? Styles.focus + " " + Styles.spin : ""}`}
               >
                 {t.val}
               </div>
@@ -379,7 +381,7 @@ function Game() {
     var fullArray = shuffle(halfArray);
     return fullArray;
   };
-  
+
   function shuffle(array: ITileSelection[]) {
     let currentIndex = array.length,
       randomIndex;

@@ -1,4 +1,4 @@
-@import "./colours.scss";
+@import "../colours.scss";
 
 .tileHolder {
   display: flex;
@@ -13,7 +13,11 @@
     justify-content: center;
     align-items: center;
     background-color: $primary;
-    background-image: linear-gradient(to top, $secondary 10%, $primary);
+    background-image: linear-gradient(
+      to top,
+      $secondary 10%,
+      $secondary-border
+    );
     border: 1px solid $secondary-border;
     color: transparent;
     @if ($devMode== "true") {
@@ -24,11 +28,21 @@
     cursor: pointer;
     margin: 4px;
     border-radius: 20px;
+    animation-name: fadeIn;
+    animation-duration: 2s;
     &.focus {
       background-color: $secondary;
-      background-image: linear-gradient(to bottom, $secondary 10%, $primary);
+      background-image: linear-gradient(
+        to bottom,
+        $primary 10%,
+        $primary-border
+      );
       border: 1px dotted $secondary-border;
       color: $tile-text;
+      &.spin {
+        animation-name: spin;
+        animation-duration: 0.5s;
+      }
     }
   }
 
@@ -48,5 +62,11 @@
   }
   100% {
     opacity: 1;
+  }
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
   }
 }

@@ -1,26 +1,11 @@
 @import "../../colours.scss";
-@import "../../tile.scss";
+@import "../../styles/tile.scss";
+@import "../../styles/input.scss";
 
 .newGame{
   background: $background;
   background-image: $newGame-Background;  
   height: 100%;
-}
-.inputGroup {
-  display: flex;
-  padding: 4px;
-  align-items: center;
-}
-.inputLabel {
-  font-weight: 700;
-  padding: 4px;
-  width: 100%;
-  display: inline;
-}
-
-input {
-  border: 1px solid $primary-border;
-  border-radius: 4px;
 }
 
 .groupSection {
