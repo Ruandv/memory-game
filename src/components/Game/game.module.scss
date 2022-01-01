@@ -1,3 +1,10 @@
+@import "../../colours.scss";
+
+.newGame{
+  background: $background;
+  background-image: $newGame-Background;  
+  height: 100%;
+}
 .inputGroup {
   display: flex;
   padding: 4px;
@@ -11,14 +18,14 @@
 }
 
 input {
-  border: 1px solid grey;
+  border: 1px solid $grey;
   border-radius: 4px;
 }
 
 .groupSection {
   font-size: x-large;
   font-weight: 700;
-  border: 1px solid red;
+  border: 1px solid $groupSection-border;
   padding: 4px;
   align-items: center;
   margin: 4px;
@@ -34,7 +41,7 @@ input {
 .offset {
   position: relative;
   top: -20px;
-  border: 1px solid darkred;
+  border: 1px solid  $groupSection-border;
   background-color: white;
   display: inline;
 }
@@ -45,49 +52,54 @@ input {
   height: 100%;
 }
 .stats {
-  background-color: cyan;
+  background-color: $stats-Background;
   flex-grow: 1;
+  padding: 4px;
   width: 270px;
 }
 .tileHolder {
   flex-grow: 4;
-  background-color: cadetblue;
+  background-color: $stats-Background;
+  opacity: 0.8;
   display: flex;
   justify-content: space-around;
   height: 95%;
   flex-wrap: wrap;
   padding: 16px;
 
-  .tile4 {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: chartreuse;
-    min-width: 22%;
-    height: 20vh;
-    font-size: x-large;
-    cursor: pointer;
-    margin: 4px;
-    border-radius: 20px;
-    &.focus {
-      background-color: chocolate;
-    }
-  }
-
+  .tile4,
   .tile6 {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: chartreuse;
-    min-width: 14%;
-    height: 15%;
+    background-color: $tile-background;
+    color:  $tile-text;//$tile-background;
     font-size: x-large;
     cursor: pointer;
     margin: 4px;
     border-radius: 20px;
     &.focus {
-      background-color: chocolate;
+      background-color: $tile-focus-background;
+      color: $tile-text;
     }
+  }
+
+  .tile4 {
+    min-width: 22%;
+    height: 20vh;
+  }
+  .tile6 {
+    min-width: 14%;
+    height: 15%;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }
 

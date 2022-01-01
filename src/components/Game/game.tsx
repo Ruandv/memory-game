@@ -51,7 +51,11 @@ function Game() {
       nextPlayer();
     }
     if (selectedArray?.length === 2) {
-      SetSelectedArray([]);
+      // trigger the timer after 2 seconds.
+      let intervalId = setInterval(() => {
+        SetSelectedArray([]);
+        clearInterval(intervalId);
+      }, 500);
     }
   }, [selectedArray]);
 
@@ -71,7 +75,11 @@ function Game() {
 
   const generateGame = () => {
     SetGameItem({
-      id: state.history.reduce((maxId, history) => Math.max(history.id, maxId), -1)+2,
+      id:
+        state.history.reduce(
+          (maxId, history) => Math.max(history.id, maxId),
+          -1
+        ) + 2,
       gameName: `${getGameName()}`,
       players: [
         { firstName: "Bob", lastName: "Builder", isActive: true } as IPlayer,
@@ -160,11 +168,20 @@ function Game() {
 
   const getNewGameForm = () => {
     return (
-      <div>
+      <div className={`${Styles.newGame}`}>
         <div className={"row"}>
           <div className={Styles.inputGroup}>
             <div className={Styles.inputLabel}>Game Name</div>
-            <input type="text" defaultValue={gameItem?.gameName}></input>
+            <input
+              type="text"
+              defaultValue={gameItem?.gameName}
+              onChange={(x) => {
+                SetGameItem((prevState) => ({
+                  ...prevState,
+                  gameName: x.target.value,
+                }));
+              }}
+            ></input>
           </div>
         </div>
         <div className={"row"}>
@@ -328,6 +345,10 @@ function Game() {
             idx: halfArray.length,
             val: tileNum.toString(),
           } as ITileSelection);
+          halfArray.push({
+            idx: halfArray.length,
+            val: tileNum.toString(),
+          } as ITileSelection);
         }
         break;
       case GameType.Small:
@@ -348,15 +369,36 @@ function Game() {
             idx: halfArray.length,
             val: tileNum.toString(),
           } as ITileSelection);
+          halfArray.push({
+            idx: halfArray.length,
+            val: tileNum.toString(),
+          } as ITileSelection);
         }
         break;
     }
-    var fullArray = halfArray;
-    halfArray.flatMap((x) => {
-      fullArray.push({ idx: fullArray.length, val: x.val });
-    });
+    var fullArray = shuffle(halfArray);
     return fullArray;
   };
+  
+  function shuffle(array: ITileSelection[]) {
+    let currentIndex = array.length,
+      randomIndex;
+
+    // While there remain elements to shuffle...
+    while (currentIndex != 0) {
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex],
+        array[currentIndex],
+      ];
+    }
+
+    return array;
+  }
 
   const isSelected = (item: ITileSelection) => {
     return (
