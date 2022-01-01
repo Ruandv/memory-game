@@ -18,7 +18,7 @@
 }
 
 input {
-  border: 1px solid $grey;
+  border: 1px solid $primary-border;
   border-radius: 4px;
 }
 
@@ -41,8 +41,8 @@ input {
 .offset {
   position: relative;
   top: -20px;
-  border: 1px solid  $groupSection-border;
-  background-color: white;
+  border: 1px solid  $primary-border;
+  background-color: $primary;
   display: inline;
 }
 
@@ -73,7 +73,13 @@ input {
     justify-content: center;
     align-items: center;
     background-color: $tile-background;
-    color:  $tile-text;//$tile-background;
+    color:  $tile-background;
+    @if($devMode=='true')
+    {
+      color:  $tile-dev-background;
+    }
+
+    
     font-size: x-large;
     cursor: pointer;
     margin: 4px;

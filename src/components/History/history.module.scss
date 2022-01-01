@@ -4,3 +4,11 @@
     flex-wrap: wrap;
     height: 100%;
   }
+
+  
+@media screen and (max-width: 375px) {
+  .gameHistory {
+    height: unset;
+    justify-content: space-around;
+  }  
+}

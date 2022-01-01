@@ -1,17 +1,55 @@
-$black : black;
-$grey : grey;
+$primary: #1e88e5;
+$primary-border: #1565c0;
+$secondary: #5e35b1;
+$secondary-border: #4527a0;
+
+$disabled-background: grey;
 $darkGrey: darkgrey;
 
+$btn-border : $primary-border;
+$btn-border-selected: $secondary-border;
+
 /*History Game*/
-$history-card-background : peachpuff;
+$history-card-background: peachpuff;
 
 /*Game*/
-$stats-Background: #4A7DB5;
-$tile-background: $grey;
+$stats-Background: $primary;
+$tile-background: grey;
 $tile-focus-background: $darkGrey;
 $tile-text: black;
 
 /*New game*/
 $background: black;
-$newGame-Background: linear-gradient($grey, $background);
-$groupSection-border: #4A7DB5
+$newGame-Background: linear-gradient($primary, $secondary);
+$groupSection-border: black;
+
+
+
+
+$devMode: "true";
+
+/*DO NOT TOUCH*/
+$tile-dev-background: black;
+
+* {
+    box-sizing: border-box;
+  }
+  html,
+  body,
+  #root {
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    font-family: inter;
+  }
+  #root {
+    display: flex;
+    padding: 4px;
+    background-color: $stats-Background;
+    flex-direction: column;
+    overflow: auto;
+  }
+  

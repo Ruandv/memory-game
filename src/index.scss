@@ -1,54 +1,10 @@
 @import "./colours.scss";
-* {
-  box-sizing: border-box;
-}
-html,
-body,
-#root {
-  border: 0px;
-  margin: 0px;
-  padding: 0px;
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
-  font-family: inter;
-}
-#root {
-  display: flex;
-  padding: 4px;
-  background-color: $stats-Background;
-  flex-direction: column;
-  overflow: auto;
-}
-
-.btn {
-  display: inline;
-  height: 100%;
-  border: 1px solid $black;
-  border-radius: 4px;
-  text-align: center;
-  padding: 4px;
-  cursor: pointer;
-  &.selected {
-    border: 2px solid $grey;
-  }
-}
-
-.btn.btnSmall {
-  font-size: small;
-}
-.btn.btnClose {
-  border: unset;
-}
-
-.btn.btnDisabled {
-  background-color: $grey;
-  cursor: not-allowed;
-}
+@import "./button.scss";
 
 .row {
   display: flex;
   align-items: center;
+  padding: 4px
 }
 
 [hidden] {

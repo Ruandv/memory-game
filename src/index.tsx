@@ -20,8 +20,9 @@ import StorageService from "./services/storageService";
 let gameList = {} as IGameState;
 //check if you have local storage data
 var storageService = StorageService.getInstance();
-var data = storageService.getValue("GameState");
+var data = storageService.getValue("GameState",true);
 if (data === null) {
+  
   gameList = {
     history: [
       {
@@ -53,13 +54,14 @@ if (data === null) {
     } as IGameItem,
   };
   storageService.save("GameState", JSON.stringify(gameList));
+  storageService.save("version", "1");
 } else {
   gameList = JSON.parse(data) as IGameState;
 }
 var preloadedState = { gameList };
 const getVersion = () => {
   var data = storageService.getValue("version", true);
-  return data.version;
+  return data;
 };
 const store = createStore(rootReducer, preloadedState as any);
 ReactDOM.render(

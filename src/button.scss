@@ -1,0 +1,32 @@
+@import "./colours.scss";
+.btn {
+  display: inline;
+  height: 100%;
+  background-color: $primary;
+  background-image: linear-gradient(to bottom, $secondary, $primary); 
+  border: 1px solid $primary-border;
+  border-radius: 4px;
+  text-align: center;
+  padding: 4px;
+  cursor: pointer;
+  &:hover {
+    background-color: $secondary;
+    border: 2px solid $secondary-border;
+  }
+  &.selected {
+    border: 2px solid $btn-border-selected;
+  }
+}
+
+.btn.btnSmall {
+  font-size: small;
+}
+.btn.btnClose {
+  border: unset;
+}
+
+.btn.btnDisabled {
+  background-color: $disabled-background;
+  background-image: linear-gradient(to bottom, rgb(250,150,150), $disabled-background); 
+  cursor: not-allowed;
+}
