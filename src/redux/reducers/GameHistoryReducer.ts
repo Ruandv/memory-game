@@ -1,57 +1,51 @@
 import { ActionType } from "../interfaces/ActionType";
 import { ActionTypes } from "../ActionTypes";
-import { IGameItem, ITileSelection } from "../interfaces/GameItem";
+import { IGameItem } from "../interfaces/GameItem";
+import { ITileSelection } from "../interfaces/ITileSelection";
 import { IGameState } from "../interfaces/NewGame";
 import StorageService from "../../services/storageService";
+import FireBaseDataService from "../../services/GameItemDataService";
 
-function nextId(gamelist: IGameItem[]) {
-    const maxId = gamelist.reduce((maxId, history) => Math.max(history.id, maxId), -1)
-    return maxId + 1
-}
 // Use the initialState as a default value
 export default function GameHistoryReducer(state: IGameState = {} as IGameState, action: ActionType) {
-    var storageService = StorageService.getInstance();
+    let storageService = StorageService.getInstance();
+    let deviceUniqueId = storageService.getValue("UniqueId", true);
     // The reducer normally looks at the action type field to decide what happens
-    var result: any;
+    let result: any;
+    let gameItem = action.payload as IGameItem;
+    let idx = state.history.findIndex(x => x.id === gameItem.id);
     switch (action.type) {
         case ActionTypes.NextPlayer:
-            var gameItem = action.payload as IGameItem;
-            var idx = state.history.findIndex(x => x.id === gameItem.id);
             state.history.splice(idx, 1);
             result = {
                 ...state,
-                current: state.current,
                 history: [...state.history,
                     gameItem
                 ] as IGameItem[]
             } as IGameState;
             break;
         case ActionTypes.SaveGame:
-            var gameItem = action.payload as IGameItem;
-            var idx = state.history.findIndex(x => x.id === gameItem.id);
             state.history.splice(idx, 1);
             result = {
                 ...state,
-                current: state.current,
                 history: [...state.history,
                     gameItem
                 ] as IGameItem[]
             } as IGameState;
             break;
         case ActionTypes.NewGame:
-            var gameItem = action.payload as IGameItem;
+
             // We need to return a new state object
             result = {
                 // that has all the existing state data
                 ...state,
-                // but has a new array for the `todos` field
-                current: state.current,
                 // with all of the old todos
                 history: [...state.history,
                 // and the new todo object
                 {
                     // Use an auto-incrementing numeric ID for this example
-                    id: nextId(state.history),
+                    id: (crypto as any).randomUUID(),
+                    deviceUniqueId,
                     players: gameItem.players,
                     completed: false,
                     gameType: gameItem.gameType,
@@ -68,6 +62,7 @@ export default function GameHistoryReducer(state: IGameState = {} as IGameState,
             // care about this specific action, return the existing state unchanged
             return state
     }
-    storageService.save("GameState", JSON.stringify(result));
+    //storageService.save("GameState", JSON.stringify(result));
+    FireBaseDataService.createSaveGameItem(gameItem, deviceUniqueId)
     return result;
 }

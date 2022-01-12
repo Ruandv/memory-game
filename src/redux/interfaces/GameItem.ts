@@ -1,8 +1,10 @@
 import { GameType } from "../GameType";
+import { ITileSelection } from "./ITileSelection";
 import { IPlayer } from "./Player";
 
 export interface IGameItem {
-    id: number;
+    id: string;
+    deviceUniqueId: string;
     gameName: string;
     gameType: GameType;
     players: IPlayer[];
@@ -11,7 +13,3 @@ export interface IGameItem {
     completed: boolean;
 }
 
-export interface ITileSelection {
-    idx: number,
-    val: string
-}

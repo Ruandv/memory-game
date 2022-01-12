@@ -2,24 +2,28 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { IGameItem } from "../../redux/interfaces/GameItem";
 import { IGameState } from "../../redux/interfaces/NewGame";
+import FireBaseDataService from "../../services/GameItemDataService";
 import Styles from "./history.module.scss";
 import HistoryItem from "./historyItem";
+import StorageService from "./../../services/storageService";
 
 function History() {
-  const [gameState, SetGameState] = useState({} as IGameState);
-  const state = useSelector((x: any) => {
-    return x.gameList as IGameState;
-  });
+  const [games, setGames] = useState({} as IGameItem[]);
   useEffect(() => {
-    SetGameState(state);
-    //closeModal();
-  }, [state]);
-
+    let service = StorageService.getInstance();
+    const deviceUniqueId = service.getValue("UniqueId",true);
+    FireBaseDataService.getAll(deviceUniqueId).then((data: IGameItem[]) => {
+      setGames(data);
+    });
+  }, []);
+  const loadList = () => {
+    return games.map((x: IGameItem, i: number) => {
+      return <HistoryItem key={i} {...{ data: x }} />;
+    });
+  };
   return (
     <div className={Styles.gameHistory}>
-      {gameState?.history?.map((x: IGameItem,i:number) => {
-        return <HistoryItem key={i} {...{ data: x }} />;
-      })}
+      {games.length > 0 ? loadList() : "Searching for games"}
     </div>
   );
 }

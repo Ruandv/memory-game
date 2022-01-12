@@ -1,5 +1,4 @@
 import React from "react";
-
 import ReactDOM from "react-dom";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import "./index.scss";
@@ -16,17 +15,27 @@ import rootReducer from "./redux/RootReducer";
 import Game from "./components/Game/game";
 import NotificationService from "./services/notificationService";
 import StorageService from "./services/storageService";
+import GeoLocationService from "./services/GeoLocationService";
+
+let id = StorageService.getInstance().getValue("UniqueId", true);
+id === null || id === "" ? (id = (crypto as any).randomUUID()) : (id = id);
+StorageService.getInstance().save("UniqueId", id);
+
+if ("geolocation" in navigator) {
+  GeoLocationService.getInstance(id);
+} else {
+  console.log("GeoLocation is not supported");
+}
 
 let gameList = {} as IGameState;
 //check if you have local storage data
-var storageService = StorageService.getInstance();
-var data = storageService.getValue("GameState",true);
+let storageService = StorageService.getInstance();
+let data = storageService.getValue("GameState", true);
 if (data === null) {
-  
   gameList = {
     history: [
       {
-        id: 213,
+        id: (crypto as any).randomUUID(),
         gameName: "JamesFunny",
         gameType: GameType.Small,
         players: [
@@ -39,28 +48,15 @@ if (data === null) {
         completed: true,
       } as IGameItem,
     ],
-    current: {
-      id: 213,
-      gameName: "CurrentGame",
-      gameType: GameType.Small,
-      players: [
-        {
-          firstName: "Current",
-          lastName: "de Villiers",
-          ranking: 0,
-        } as IPlayer,
-      ],
-      completed: false,
-    } as IGameItem,
   };
   storageService.save("GameState", JSON.stringify(gameList));
   storageService.save("version", "1");
 } else {
   gameList = JSON.parse(data) as IGameState;
 }
-var preloadedState = { gameList };
+let preloadedState = { gameList };
 const getVersion = () => {
-  var data = storageService.getValue("version", true);
+  let data = storageService.getValue("version", true);
   return data;
 };
 const store = createStore(rootReducer, preloadedState as any);
@@ -77,7 +73,7 @@ ReactDOM.render(
           <Route path="game/:gameId" element={<Game />} />
           <Route path="newGameForm" element={<Game />} />
         </Routes>
-        <footer>{`Version : ${getVersion()}`}</footer>
+        <footer>{`Version : ${getVersion()} UniqueID: ${id}`}</footer>
       </BrowserRouter>
     </Provider>
   </React.StrictMode>,
@@ -88,7 +84,7 @@ const conf = {
   onSuccess: (registration: ServiceWorkerRegistration) => {},
   onUpdate: (reg: ServiceWorkerRegistration) => {
     NotificationService.register(reg);
-    var res = NotificationService.getInstance();
+    let res = NotificationService.getInstance();
     if (res !== null) {
       reg.waiting!.postMessage({ type: "SKIP_WAITING" });
       (res as NotificationService).showMyNotification("T E S T 1 2 3");

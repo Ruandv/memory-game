@@ -1,21 +1,21 @@
 import Styles from "./game.module.scss";
 import InputGroup from "../../controls/inputGroup/inputGroup";
 import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { IGameItem, ITileSelection } from "../../redux/interfaces/GameItem";
+import { IGameItem } from "../../redux/interfaces/GameItem";
+import { ITileSelection } from "../../redux/interfaces/ITileSelection";
 import { IPlayer } from "../../redux/interfaces/Player";
 import { ActionTypes } from "../../redux/ActionTypes";
 import { GameType } from "../../redux/GameType";
-import { IGameState } from "../../redux/interfaces/NewGame";
+import FireBaseDataService from "../../services/GameItemDataService";
+import StorageService from "../../services/storageService";
 
 function Game() {
   let navigate = useNavigate();
   let params = useParams();
   const dispatch = useDispatch();
-  const state = useSelector((x: any) => {
-    return x.gameList as IGameState;
-  });
+
   const [selectedArray, SetSelectedArray] = useState<ITileSelection[]>();
   const [gameItem, SetGameItem] = useState<IGameItem>({
     gameName: "",
@@ -61,27 +61,33 @@ function Game() {
   }, [selectedArray]);
 
   useEffect(() => {
-    if (params.gameId !== undefined && params.gameId) {
-      var game = state.history[state.history.length - 1];
-      if (params.gameId !== "0000") {
-        game = state.history.filter(
-          (x) => x.id === parseInt(params.gameId!)
-        )[0];
+    var games: IGameItem[] = [];
+    const getGamesAsync = async () => {
+      let service = StorageService.getInstance();
+      const deviceUniqueId = service.getValue("UniqueId", true);
+      games = await FireBaseDataService.getAll(deviceUniqueId);
+      if (params.gameId !== undefined && params.gameId) {
+        if (params.gameId !== "0000") {
+          var game = games.filter((x) => {
+            if (!x) {
+              return false;
+            }
+            return x.id === params.gameId;
+          });
+          SetGameItem(game[0]);
+        }
+      } else {
+        generateGame(deviceUniqueId);
       }
-      SetGameItem(game);
-    } else {
-      generateGame();
-    }
+    };
+    getGamesAsync();
   }, []);
 
-  const generateGame = () => {
+  const generateGame = (deviceUniqueId: string) => {
     SetGameItem({
-      id:
-        state.history.reduce(
-          (maxId, history) => Math.max(history.id, maxId),
-          -1
-        ) + 2,
+      id: (crypto as any).randomUUID(),
       gameName: `${getGameName()}`,
+      deviceUniqueId,
       players: [
         { firstName: "Bob", lastName: "Builder", isActive: true } as IPlayer,
       ] as IPlayer[],
@@ -163,7 +169,7 @@ function Game() {
         type: ActionTypes.NewGame,
         payload: gameItem,
       });
-      navigate("/game/0000");
+      navigate(`/game/${gameItem.id}`);
     }
   };
   let firstNameProps = {
@@ -278,7 +284,7 @@ function Game() {
   };
 
   const getExistingGame = () => {
-    const d = (
+    const existingGame = (
       <div className={Styles.game}>
         <div className={Styles.stats}>
           {gameItem?.players.map((p, i) => {
@@ -324,7 +330,7 @@ function Game() {
         </div>
       </div>
     );
-    return d;
+    return existingGame;
   };
 
   const generateTiles = (gameType: GameType) => {
@@ -407,10 +413,10 @@ function Game() {
       (selectedArray !== undefined && selectedArray?.indexOf(item) > -1) ||
       (gameItem.validTiles &&
         gameItem.validTiles
-          .map((t) => {
-            return JSON.stringify(t);
+          .map((t: ITileSelection) => {
+            return JSON.stringify({ val: t.val, idx: t.idx });
           })
-          .indexOf(JSON.stringify(item)) > -1)
+          .indexOf(JSON.stringify({ val: item.val, idx: item.idx })) > -1)
     );
   };
 

@@ -8,6 +8,9 @@ export interface IHistoryItemProps {
 function HistoryItem(props: any) {
   const { data }: IHistoryItemProps = props;
   let navigate = useNavigate();
+  if (data === undefined) {
+    return null;
+  }
   return (
     <div
       onClick={() => {

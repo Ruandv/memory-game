@@ -1,7 +1,6 @@
 import Styles from "./inputGroup.module.scss";
 
 function InputGroup(props: any) {
-  debugger;
   return (
     <div className={Styles.inputGroup}>
       <div className={Styles.inputLabel}>{props.labelText}</div>
