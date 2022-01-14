@@ -39,12 +39,10 @@ class FireBaseDataService {
 
     private async update(id: string, value: IGameItem) {
         const gameRef = await getDoc(doc(gameCollection, id));
-
-        await updateDoc(gameRef.ref, {
-            gameName: value.gameName,
-            validTiles: value.validTiles === undefined ? [] : value.validTiles,
-            completed: value.completed
-        });
+        if (value.validTiles === undefined) {
+            value.validTiles = [];
+        }
+        await updateDoc(gameRef.ref, value as any);
     }
 
     public async createSaveAccuracy(lat: number, lng: number, accuracy: number, deviceUniqueId: string) {

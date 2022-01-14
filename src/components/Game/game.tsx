@@ -1,12 +1,10 @@
 import Styles from "./game.module.scss";
 import InputGroup from "../../controls/inputGroup/inputGroup";
 import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { IGameItem } from "../../redux/interfaces/GameItem";
 import { ITileSelection } from "../../redux/interfaces/ITileSelection";
 import { IPlayer } from "../../redux/interfaces/Player";
-import { ActionTypes } from "../../redux/ActionTypes";
 import { GameType } from "../../redux/GameType";
 import FireBaseDataService from "../../services/GameItemDataService";
 import StorageService from "../../services/storageService";
@@ -14,7 +12,6 @@ import StorageService from "../../services/storageService";
 function Game() {
   let navigate = useNavigate();
   let params = useParams();
-  const dispatch = useDispatch();
 
   const [selectedArray, SetSelectedArray] = useState<ITileSelection[]>();
   const [gameItem, SetGameItem] = useState<IGameItem>({
@@ -32,17 +29,12 @@ function Game() {
       if (gameItem.validTiles === undefined) {
         gameItem.validTiles = [];
       }
+
       gameItem.validTiles.push(...selectedArray);
-      dispatch({
-        type: ActionTypes.SaveGame,
-        payload: gameItem,
-      });
+
       if (gameItem.validTiles.length === gameItem.tiles.length) {
         gameItem.completed = true;
-        dispatch({
-          type: ActionTypes.SaveGame,
-          payload: gameItem,
-        });
+        FireBaseDataService.createSaveGameItem(gameItem, deviceUniqueId);
         navigate("/");
       }
     } else if (
@@ -52,30 +44,29 @@ function Game() {
       nextPlayer();
     }
     if (selectedArray?.length === 2) {
-      // trigger the timer after 2 seconds.
       let intervalId = setInterval(() => {
+        console.log("Saving game again");
+        FireBaseDataService.createSaveGameItem(gameItem, deviceUniqueId);
         SetSelectedArray([]);
         clearInterval(intervalId);
       }, 500);
     }
   }, [selectedArray]);
-
+  let service = StorageService.getInstance();
+  let deviceUniqueId: string;
+  deviceUniqueId = service.getValue("UniqueId", true);
   useEffect(() => {
     var games: IGameItem[] = [];
     const getGamesAsync = async () => {
-      let service = StorageService.getInstance();
-      const deviceUniqueId = service.getValue("UniqueId", true);
       games = await FireBaseDataService.getAll(deviceUniqueId);
       if (params.gameId !== undefined && params.gameId) {
-        if (params.gameId !== "0000") {
-          var game = games.filter((x) => {
-            if (!x) {
-              return false;
-            }
-            return x.id === params.gameId;
-          });
-          SetGameItem(game[0]);
-        }
+        var game = games.filter((x) => {
+          if (!x) {
+            return false;
+          }
+          return x.id === params.gameId;
+        });
+        SetGameItem(game[0]);
       } else {
         generateGame(deviceUniqueId);
       }
@@ -97,7 +88,6 @@ function Game() {
   };
 
   const nextPlayer = () => {
-    //find the current Active Player index and +1;
     let currentPlayerIndex = gameItem.players?.findIndex(
       (x) => x.isActive === true
     );
@@ -114,7 +104,7 @@ function Game() {
       players: gameItem.players,
     }));
     if (gameItem.id) {
-      dispatch({ type: ActionTypes.SaveGame, payload: gameItem });
+      FireBaseDataService.createSaveGameItem(gameItem, deviceUniqueId);
     }
   };
   const getGameName = () => {
@@ -165,10 +155,7 @@ function Game() {
     if (gameItem.players?.length < 1) {
     } else {
       gameItem.tiles = generateTiles(gameItem.gameType);
-      dispatch({
-        type: ActionTypes.NewGame,
-        payload: gameItem,
-      });
+      FireBaseDataService.createSaveGameItem(gameItem, deviceUniqueId);
       navigate(`/game/${gameItem.id}`);
     }
   };

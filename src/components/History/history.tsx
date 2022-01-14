@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { IGameItem } from "../../redux/interfaces/GameItem";
-import { IGameState } from "../../redux/interfaces/NewGame";
 import FireBaseDataService from "../../services/GameItemDataService";
 import Styles from "./history.module.scss";
 import HistoryItem from "./historyItem";
