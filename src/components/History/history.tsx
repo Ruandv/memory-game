@@ -9,14 +9,18 @@ function History() {
   const [games, setGames] = useState({} as IGameItem[]);
   useEffect(() => {
     let service = StorageService.getInstance();
-    const deviceUniqueId = service.getValue("UniqueId",true);
+    const deviceUniqueId = service.getValue("UniqueId", true);
     FireBaseDataService.getAll(deviceUniqueId).then((data: IGameItem[]) => {
       setGames(data);
     });
   }, []);
   const loadList = () => {
     return games.map((x: IGameItem, i: number) => {
-      return <HistoryItem key={i} {...{ data: x }} />;
+      return !x ? null : (
+        <div>
+          <HistoryItem key={i} {...{ data: x }} />
+        </div>
+      );
     });
   };
   return (

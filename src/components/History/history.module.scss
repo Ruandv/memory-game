@@ -1,13 +1,12 @@
 .gameHistory {
-    display: flex;
-    flex-wrap: wrap;
-    height: 100%;
-  }
+  display: flex;
+  flex-wrap: wrap;
+  flex-grow: 1;
+}
 
-  
 @media screen and (max-width: 375px) {
   .gameHistory {
     height: unset;
     justify-content: space-around;
-  }  
+  }
 }
