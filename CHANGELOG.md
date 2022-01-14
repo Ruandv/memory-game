@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.1](https://github.com/Ruandv/memory-game/compare/v0.2.0...v0.2.1) (2022-01-14)
+
+
+### Bug Fixes
+
+* updated styles ([cd9ada0](https://github.com/Ruandv/memory-game/commit/cd9ada0d9269bd5077232d9f7cee71c8b3a2b388))
+
 ## [0.2.0](https://github.com/Ruandv/memory-game/compare/v0.1.1...v0.2.0) (2022-01-14)
 
 
