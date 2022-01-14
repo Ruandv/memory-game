@@ -10,7 +10,9 @@ import NotificationService from "./services/notificationService";
 import StorageService from "./services/storageService";
 import GeoLocationService from "./services/GeoLocationService";
 let deviceUniqueId = StorageService.getInstance().getValue("UniqueId", true);
-deviceUniqueId === null || deviceUniqueId === "" ? (deviceUniqueId = (crypto as any).randomUUID()) : (deviceUniqueId = deviceUniqueId);
+deviceUniqueId === null || deviceUniqueId === ""
+  ? (deviceUniqueId = (crypto as any).randomUUID())
+  : (deviceUniqueId = deviceUniqueId);
 StorageService.getInstance().save("UniqueId", deviceUniqueId);
 
 if ("geolocation" in navigator) {
@@ -18,11 +20,12 @@ if ("geolocation" in navigator) {
 } else {
   console.log("GeoLocation is not supported");
 }
-let storageService = StorageService.getInstance();
+
 const getVersion = () => {
-  let data = storageService.getValue("version", true);
+  let data = process.env.REACT_APP_VERSION;
   return data;
 };
+
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
