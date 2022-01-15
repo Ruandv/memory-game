@@ -1,13 +1,13 @@
-import Styles from "./historyItem.module.scss";
-import { useNavigate } from "react-router-dom";
-import { IGameItem } from "../../redux/interfaces/GameItem";
+import Styles from './historyItem.module.scss';
+import { useNavigate } from 'react-router-dom';
+import { IGameItem } from '../../redux/interfaces/GameItem';
 
 export interface IHistoryItemProps {
   data: IGameItem;
 }
-function HistoryItem(props: any) {
+function HistoryItem (props: any) {
   const { data }: IHistoryItemProps = props;
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   if (data === undefined) {
     return null;
   }
@@ -26,7 +26,7 @@ function HistoryItem(props: any) {
         <p>Game Completed: {data.completed.toString()}</p>
       </div>
       <footer>
-        <div className={"btn"} hidden={data.completed === true}>
+        <div className={'btn'} hidden={data.completed === true}>
           Continue
         </div>
       </footer>

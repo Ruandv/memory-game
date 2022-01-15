@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
-import Styles from "./modal.module.scss";
+import React, { useState, useEffect } from 'react';
 
-function Modal(props: any) {
+import Styles from './modal.module.scss';
+
+function Modal (props: any) {
   const { message, heading, actionButtons: actionsButtonText, onClose }: IModalProps = props;
   const [canShow, SetCanShow] = useState(props.display);
   useEffect(() => {
@@ -37,8 +37,8 @@ function Modal(props: any) {
               <div
                 onClick={b.onClick}
                 key={actionsButtonText.indexOf(b)}
-                className={`${Styles.btn} ${b.isDefault===true?Styles.selected:''}`}
-            
+                className={`${Styles.btn} ${b.isDefault === true ? Styles.selected : ''}`}
+
               >
                 {b.text}
               </div>

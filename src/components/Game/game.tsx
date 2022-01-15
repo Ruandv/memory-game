@@ -10,13 +10,13 @@ import FireBaseDataService from "../../services/GameItemDataService";
 import StorageService from "../../services/storageService";
 
 function Game() {
-  let navigate = useNavigate();
-  let params = useParams();
+  const navigate = useNavigate();
+  const params = useParams();
 
   const [selectedArray, SetSelectedArray] = useState<ITileSelection[]>();
   const [gameItem, SetGameItem] = useState<IGameItem>({
     gameName: "",
-    gameType: GameType.Small,
+    gameType: undefined,
     players: [{} as IPlayer] as IPlayer[],
     completed: false,
   } as IGameItem);
@@ -44,7 +44,7 @@ function Game() {
       nextPlayer();
     }
     if (selectedArray?.length === 2) {
-      let intervalId = setInterval(() => {
+      const intervalId = setInterval(() => {
         console.log("Saving game again");
         FireBaseDataService.createSaveGameItem(gameItem, deviceUniqueId);
         SetSelectedArray([]);
@@ -52,15 +52,15 @@ function Game() {
       }, 500);
     }
   }, [selectedArray]);
-  let service = StorageService.getInstance();
+  const service = StorageService.getInstance();
   let deviceUniqueId: string;
   deviceUniqueId = service.getValue("UniqueId", true);
   useEffect(() => {
-    var games: IGameItem[] = [];
+    let games: IGameItem[] = [];
     const getGamesAsync = async () => {
       games = await FireBaseDataService.getAll(deviceUniqueId);
       if (params.gameId !== undefined && params.gameId) {
-        var game = games.filter((x) => {
+        const game = games.filter((x) => {
           if (!x) {
             return false;
           }
@@ -82,7 +82,7 @@ function Game() {
       players: [
         { firstName: "Bob", lastName: "Builder", isActive: true } as IPlayer,
       ] as IPlayer[],
-      gameType: GameType.Large,
+      gameType: undefined,
       completed: false,
     } as IGameItem);
   };
@@ -140,7 +140,7 @@ function Game() {
       "Chiefwares",
       "Blueworks",
     ];
-    var d = gameNames[Math.floor(Math.random() * gameNames.length) + 1];
+    const d = gameNames[Math.floor(Math.random() * gameNames.length) + 1];
     return d;
   };
 
@@ -154,24 +154,24 @@ function Game() {
   const saveGame = () => {
     if (gameItem.players?.length < 1) {
     } else {
-      gameItem.tiles = generateTiles(gameItem.gameType);
+      gameItem.tiles = generateTiles(gameItem.gameType!);
       FireBaseDataService.createSaveGameItem(gameItem, deviceUniqueId);
       navigate(`/game/${gameItem.id}`);
     }
   };
-  let firstNameProps = {
+  const firstNameProps = {
     labelText: "First name",
     defaultValue: "",
     onChange: (evt: any) => {},
   };
 
-  let lastNameProps = {
+  const lastNameProps = {
     labelText: "Last name",
     defaultValue: "",
     onChange: (evt: any) => {},
   };
 
-  let gameNameProps = {
+  const gameNameProps = {
     labelText: "Game Name",
     defaultValue: gameItem?.gameName,
     onChange: (x: any) => {
@@ -192,13 +192,14 @@ function Game() {
             <div className={Styles.inputLabel}>Game Size</div>
             <select
               onChange={(x) => {
-                var t: any = x.target.selectedOptions[0].value;
+                const t: any = x.target.selectedOptions[0].value;
                 SetGameItem((prevState) => ({
                   ...prevState,
                   gameType: GameType[t as keyof typeof GameType],
                 }));
               }}
             >
+              <option>Select a size</option>;
               {Object.keys(GameType).map((k) => {
                 return <option>{k.toString()}</option>;
               })}
@@ -227,7 +228,7 @@ function Game() {
                     <div className={`${Styles.inputGroup} ${Styles.offset}`}>
                       <div className={`${Styles.inputLabel}`}>Player {i}</div>
                       <div
-                        className={`btn btnSmall btnClose`}
+                        className={"btn btnSmall btnClose"}
                         onClick={(evt) => {
                           gameItem.players.splice(i, 1);
                           SetGameItem((prevState) => ({
@@ -257,7 +258,9 @@ function Game() {
         <div className={"row"}>
           <div
             className={`btn ${
-              gameItem.players?.length > 0 ? "" : "btnDisabled"
+              gameItem.players?.length > 0 && gameItem.gameType !== undefined
+                ? ""
+                : "btnDisabled"
             }`}
             onClick={() => {
               saveGame();
@@ -288,8 +291,8 @@ function Game() {
               <div
                 key={t.idx}
                 onClick={(ev) => {
-                  var newArr = [];
-                  var shouldAdd = true;
+                  const newArr = [];
+                  let shouldAdd = true;
                   selectedArray?.forEach((x) => {
                     if (x === t) {
                       shouldAdd = false;
@@ -321,7 +324,7 @@ function Game() {
   };
 
   const generateTiles = (gameType: GameType) => {
-    let halfArray = [] as ITileSelection[];
+    const halfArray = [] as ITileSelection[];
     switch (gameType) {
       case GameType.Large:
         for (let i = 0; i < 18; i++) {
@@ -371,13 +374,13 @@ function Game() {
         }
         break;
     }
-    var fullArray = shuffle(halfArray);
+    const fullArray = shuffle(halfArray);
     return fullArray;
   };
 
   function shuffle(array: ITileSelection[]) {
-    let currentIndex = array.length,
-      randomIndex;
+    let currentIndex = array.length;
+    let randomIndex;
 
     // While there remain elements to shuffle...
     while (currentIndex != 0) {

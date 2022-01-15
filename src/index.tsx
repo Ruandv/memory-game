@@ -1,29 +1,29 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import "./index.scss";
-import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
-import History from "./components/History/history";
-import reportWebVitals from "./reportWebVitals";
-import Game from "./components/Game/game";
-import NotificationService from "./services/notificationService";
-import StorageService from "./services/storageService";
-import GeoLocationService from "./services/GeoLocationService";
-let deviceUniqueId = StorageService.getInstance().getValue("UniqueId", true);
-deviceUniqueId === null || deviceUniqueId === ""
-  ? (deviceUniqueId = (crypto as any).randomUUID())
-  : (deviceUniqueId = deviceUniqueId);
-StorageService.getInstance().save("UniqueId", deviceUniqueId);
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import './index.scss';
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+import History from './components/History/history';
+import reportWebVitals from './reportWebVitals';
+import Game from './components/Game/game';
+import StorageService from './services/storageService';
+import GeoLocationService from './services/GeoLocationService';
+let deviceUniqueId = StorageService.getInstance().getValue('UniqueId', true);
 
-if ("geolocation" in navigator) {
+console.log('React Version: ' + React.version);
+deviceUniqueId =
+  deviceUniqueId === null || deviceUniqueId === ''
+    ? (crypto as any).randomUUID()
+    : deviceUniqueId;
+StorageService.getInstance().save('UniqueId', deviceUniqueId);
+if ('geolocation' in navigator) {
   GeoLocationService.getInstance(deviceUniqueId);
 } else {
-  console.log("GeoLocation is not supported");
+  console.log('GeoLocation is not supported');
 }
 
 const getVersion = () => {
-  let data = process.env.REACT_APP_VERSION;
-  return data;
+  return process.env.REACT_APP_VERSION;
 };
 
 ReactDOM.render(
@@ -41,21 +41,15 @@ ReactDOM.render(
       <footer>{`Version : ${getVersion()} UniqueID: ${deviceUniqueId}`}</footer>
     </BrowserRouter>
   </React.StrictMode>,
-  document.getElementById("root")
+  document.getElementById('root')
 );
 
 const conf = {
   onSuccess: (registration: ServiceWorkerRegistration) => {},
   onUpdate: (reg: ServiceWorkerRegistration) => {
-    NotificationService.register(reg);
-    let res = NotificationService.getInstance();
-    if (res !== null) {
-      reg.waiting!.postMessage({ type: "SKIP_WAITING" });
-      (res as NotificationService).showMyNotification("T E S T 1 2 3");
-    } else {
-      console.error("NS IS NULL!!");
-    }
-  },
+    reg.waiting!.postMessage({ type: 'SKIP_WAITING' });
+    console.info('New version installed');
+  }
 };
 
 serviceWorkerRegistration.register(conf);

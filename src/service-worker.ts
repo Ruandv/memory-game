@@ -65,8 +65,8 @@ registerRoute(
     plugins: [
       // Ensure that once this runtime cache reaches a maximum size the
       // least-recently used images are removed.
-      new ExpirationPlugin({ maxEntries: 50 }),
-    ],
+      new ExpirationPlugin({ maxEntries: 50 })
+    ]
   })
 );
 
@@ -75,22 +75,22 @@ registerRoute(
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
-    var storageService = StorageService.getInstance();
-    var dt = msToTime(new Date());
-    storageService.save("version", JSON.stringify(`{version:'${dt}'}`));
+    const storageService = StorageService.getInstance();
+    const dt = msToTime(new Date());
+    storageService.save('version', JSON.stringify(`{version:'${dt}'}`));
   }
 });
-function msToTime(duration: any) {
-  var milliseconds = Math.floor((duration % 1000) / 100),
-    seconds = Math.floor((duration / 1000) % 60),
+function msToTime (duration: any) {
+  const milliseconds = Math.floor((duration % 1000) / 100);
+  const seconds = Math.floor((duration / 1000) % 60);
 
-    minutes = Math.floor((duration / (1000 * 60)) % 60),
-    hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((duration / (1000 * 60)) % 60);
+  const hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
 
-  var hours1 = (hours < 10) ? "0" + hours : hours;
-  var minutes1 = (minutes < 10) ? "0" + minutes : minutes;
-  var seconds1 = (seconds < 10) ? "0" + seconds : seconds;
- 
-  return hours1 + ":--" + minutes1 + ":" + seconds1 + "." + milliseconds;
+  const hours1 = (hours < 10) ? '0' + hours : hours;
+  const minutes1 = (minutes < 10) ? '0' + minutes : minutes;
+  const seconds1 = (seconds < 10) ? '0' + seconds : seconds;
+
+  return hours1 + ':--' + minutes1 + ':' + seconds1 + '.' + milliseconds;
 }
 // Any other custom service worker logic can go here.

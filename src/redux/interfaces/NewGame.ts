@@ -1,4 +1,4 @@
-import { IGameItem } from "./GameItem";
+import { IGameItem } from './GameItem';
 
 export interface IGameState {
     history: IGameItem[];
