@@ -1,6 +1,6 @@
 {
   "name": "memory-game",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "private": true,
   "homepage": "https://ruandv.github.io/memory-game",
   "dependencies": {
@@ -44,7 +44,7 @@
   "scripts": {
     "predeploy": "npm run build",
     "release": "standard-version",
-    "deploy": "gh-pages -d build",
+    "deploy": "yarn run release && gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
