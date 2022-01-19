@@ -1,4 +1,4 @@
-import { GameType } from '../GameType';
+import { GameType } from '../enums/GameType';
 import { ITileSelection } from './ITileSelection';
 import { IPlayer } from './Player';
 

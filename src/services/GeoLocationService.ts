@@ -1,7 +1,9 @@
-import FireBaseDataService from './GameItemDataService';
+import { ILocationData } from '../interfaces/ILocationData';
+import FireBaseGeoService from './FireBaseGeoService';
 class GeoLocationService {
   private static _instance: GeoLocationService | undefined;
   private static _uniqueId: string;
+  static _db: FireBaseGeoService;
   public static getInstance = (uniqueId: string) => {
     this._uniqueId = uniqueId;
     if (!navigator.geolocation) {
@@ -9,6 +11,7 @@ class GeoLocationService {
     } else {
       if (this._instance === undefined) {
         this._instance = new GeoLocationService();
+        this._db = new FireBaseGeoService();
       }
       const options = {
         enableHighAccuracy: true,
@@ -22,7 +25,7 @@ class GeoLocationService {
 
   private static updateLocation = (position: any) => {
     console.log('Update Location (' + this._uniqueId + ')' + JSON.stringify(position.coords.latitude));
-    FireBaseDataService.createSaveAccuracy(position.coords.latitude, position.coords.longitude, position.coords.accuracy, this._uniqueId);
+    this._db.createSave({ lat: position.coords.latitude, lng: position.coords.longitude, accuracy: position.coords.accuracy } as ILocationData, this._uniqueId);
   }
 
   private static error = (err: any) => {
@@ -30,7 +33,7 @@ class GeoLocationService {
       case 1:
         // user denied permission
         console.info('(' + this._uniqueId + ') ' + err.message);
-        FireBaseDataService.createSaveAccuracy(0, 0, 0, this._uniqueId);
+        this._db.createSave({ lat: 0, lng: 0, accuracy: 0 } as ILocationData, this._uniqueId);
         break;
       default:
         console.error(err);

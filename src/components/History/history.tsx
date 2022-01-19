@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { IGameItem } from '../../redux/interfaces/GameItem';
-import FireBaseDataService from '../../services/GameItemDataService';
+import { IGameItem } from '../../interfaces/GameItem';
+import FireBaseGameService from '../../services/FireBaseGameService';
 import Styles from './history.module.scss';
 import HistoryItem from './historyItem';
 import StorageService from './../../services/storageService';
@@ -10,7 +10,7 @@ function History () {
   useEffect(() => {
     const service = StorageService.getInstance();
     const deviceUniqueId = service.getValue('UniqueId', true);
-    FireBaseDataService.getAll(deviceUniqueId).then((data: IGameItem[]) => {
+    FireBaseGameService.getAll(deviceUniqueId).then((data: IGameItem[]) => {
       setGames(data);
     });
   }, []);

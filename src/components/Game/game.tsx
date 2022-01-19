@@ -2,11 +2,11 @@ import Styles from "./game.module.scss";
 import InputGroup from "../../controls/inputGroup/inputGroup";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { IGameItem } from "../../redux/interfaces/GameItem";
-import { ITileSelection } from "../../redux/interfaces/ITileSelection";
-import { IPlayer } from "../../redux/interfaces/Player";
-import { GameType } from "../../redux/GameType";
-import FireBaseDataService from "../../services/GameItemDataService";
+import { IGameItem } from "../../interfaces/GameItem";
+import { ITileSelection } from "../../interfaces/ITileSelection";
+import { IPlayer } from "../../interfaces/Player";
+import { GameType } from "../../enums/GameType";
+import FireBaseGameService from "../../services/FireBaseGameService";
 import StorageService from "../../services/storageService";
 
 function Game() {
@@ -34,7 +34,7 @@ function Game() {
 
       if (gameItem.validTiles.length === gameItem.tiles.length) {
         gameItem.completed = true;
-        FireBaseDataService.createSaveGameItem(gameItem, deviceUniqueId);
+        FireBaseGameService.createSave(gameItem, deviceUniqueId);
         navigate("/");
       }
     } else if (
@@ -46,7 +46,7 @@ function Game() {
     if (selectedArray?.length === 2) {
       const intervalId = setInterval(() => {
         console.log("Saving game again");
-        FireBaseDataService.createSaveGameItem(gameItem, deviceUniqueId);
+        FireBaseGameService.createSave(gameItem, deviceUniqueId);
         SetSelectedArray([]);
         clearInterval(intervalId);
       }, 500);
@@ -55,10 +55,11 @@ function Game() {
   const service = StorageService.getInstance();
   let deviceUniqueId: string;
   deviceUniqueId = service.getValue("UniqueId", true);
+
   useEffect(() => {
     let games: IGameItem[] = [];
     const getGamesAsync = async () => {
-      games = await FireBaseDataService.getAll(deviceUniqueId);
+      games = await FireBaseGameService.getAll(deviceUniqueId);
       if (params.gameId !== undefined && params.gameId) {
         const game = games.filter((x) => {
           if (!x) {
@@ -104,7 +105,7 @@ function Game() {
       players: gameItem.players,
     }));
     if (gameItem.id) {
-      FireBaseDataService.createSaveGameItem(gameItem, deviceUniqueId);
+      FireBaseGameService.createSave(gameItem, deviceUniqueId);
     }
   };
   const getGameName = () => {
@@ -155,7 +156,7 @@ function Game() {
     if (gameItem.players?.length < 1) {
     } else {
       gameItem.tiles = generateTiles(gameItem.gameType!);
-      FireBaseDataService.createSaveGameItem(gameItem, deviceUniqueId);
+      FireBaseGameService.createSave(gameItem, deviceUniqueId);
       navigate(`/game/${gameItem.id}`);
     }
   };
@@ -313,7 +314,7 @@ function Game() {
                  } 
                      ${isSelected(t) ? Styles.focus + " " + Styles.spin : ""}`}
               >
-                {t.val}
+                {isSelected(t) ? t.val : ""}
               </div>
             );
           })}

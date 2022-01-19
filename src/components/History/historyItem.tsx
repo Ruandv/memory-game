@@ -1,6 +1,6 @@
 import Styles from './historyItem.module.scss';
 import { useNavigate } from 'react-router-dom';
-import { IGameItem } from '../../redux/interfaces/GameItem';
+import { IGameItem } from '../../interfaces/GameItem';
 
 export interface IHistoryItemProps {
   data: IGameItem;
