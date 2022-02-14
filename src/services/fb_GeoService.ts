@@ -1,5 +1,5 @@
 import { getDoc, setDoc, doc, updateDoc, collection } from 'firebase/firestore';
-import db from '../firebase';
+import db from '../firebase_config';
 import { ILocationData } from '../interfaces/ILocationData';
 import { IRepository } from "./IRepository";
 

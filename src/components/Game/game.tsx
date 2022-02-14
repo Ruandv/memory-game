@@ -2,11 +2,11 @@ import Styles from "./game.module.scss";
 import InputGroup from "../../controls/inputGroup/inputGroup";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { IGameItem } from "../../interfaces/GameItem";
+import { IGameItem } from "../../interfaces/IGameItem";
 import { ITileSelection } from "../../interfaces/ITileSelection";
-import { IPlayer } from "../../interfaces/Player";
+import { IPlayer } from "../../interfaces/IPlayer";
 import { GameType } from "../../enums/GameType";
-import FireBaseGameService from "../../services/FireBaseGameService";
+import FireBaseGameService from "../../services/fb_GameService";
 import StorageService from "../../services/storageService";
 
 function Game() {

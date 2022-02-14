@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { IGameItem } from '../../interfaces/GameItem';
-import FireBaseGameService from '../../services/FireBaseGameService';
+import { IGameItem } from '../../interfaces/IGameItem';
+import FireBaseGameService from '../../services/fb_GameService';
 import Styles from './history.module.scss';
 import HistoryItem from './historyItem';
 import StorageService from './../../services/storageService';

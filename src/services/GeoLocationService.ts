@@ -1,5 +1,5 @@
 import { ILocationData } from '../interfaces/ILocationData';
-import FireBaseGeoService from './FireBaseGeoService';
+import FireBaseGeoService from './fb_GeoService';
 class GeoLocationService {
   private static _instance: GeoLocationService | undefined;
   private static _uniqueId: string;

@@ -1,6 +1,6 @@
 import Styles from './historyItem.module.scss';
 import { useNavigate } from 'react-router-dom';
-import { IGameItem } from '../../interfaces/GameItem';
+import { IGameItem } from '../../interfaces/IGameItem';
 
 export interface IHistoryItemProps {
   data: IGameItem;

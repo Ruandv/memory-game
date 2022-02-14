@@ -1,6 +1,6 @@
 import { GameType } from '../enums/GameType';
 import { ITileSelection } from './ITileSelection';
-import { IPlayer } from './Player';
+import { IPlayer } from './IPlayer';
 
 export interface IGameItem {
     id: string;

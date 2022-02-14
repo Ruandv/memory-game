@@ -1,6 +1,6 @@
-import db from '../firebase';
+import db from '../firebase_config';
 import { collection, getDocs, getDoc, setDoc, doc, updateDoc } from 'firebase/firestore';
-import { IGameItem } from '../interfaces/GameItem';
+import { IGameItem } from '../interfaces/IGameItem';
 import { IRepository } from './IRepository';
 
 const gameCollection = collection(db, 'Games');
