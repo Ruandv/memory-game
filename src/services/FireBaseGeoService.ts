@@ -1,4 +1,4 @@
-import { getDoc, setDoc, doc, updateDoc, collection, getDocs } from 'firebase/firestore/lite';
+import { getDoc, setDoc, doc, updateDoc, collection } from 'firebase/firestore';
 import db from '../firebase';
 import { ILocationData } from '../interfaces/ILocationData';
 import { IRepository } from "./IRepository";
